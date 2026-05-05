@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memproses Gambar...</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="logo-icon">
+            <span class="logo-text">Quantixel</span>
+        </a>
+        <a href="/about" class="nav-link">About</a>
+    </header>
+
+    <!-- Loading Content -->
+    <main class="loading-page">
+        <div class="loading-container">
+            <div class="loading-animation">
+                <div class="pixel-loader">
+                    <div class="pixel p1"></div>
+                    <div class="pixel p2"></div>
+                    <div class="pixel p3"></div>
+                    <div class="pixel p4"></div>
+                    <div class="pixel p5"></div>
+                    <div class="pixel p6"></div>
+                    <div class="pixel p7"></div>
+                    <div class="pixel p8"></div>
+                    <div class="pixel p9"></div>
+                </div>
+            </div>
+            <h1>Memproses Gambar...</h1>
+            <p>Sedang mengkonversi gambar ke berbagai ukuran pixel</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text" id="progressText">Menyiapkan...</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>2026 Pixel Art Converter. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const conversionId = "{{ conversion_id }}";
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        
+        const steps = [
+            { progress: 20, text: 'Membaca gambar...' },
+            { progress: 40, text: 'Mengkonversi ke 8px...' },
+            { progress: 55, text: 'Mengkonversi ke 16px...' },
+            { progress: 70, text: 'Mengkonversi ke 24px...' },
+            { progress: 85, text: 'Mengkonversi ke 32px & 48px...' },
+            { progress: 100, text: 'Selesai!' }
+        ];
+        
+        let currentStep = 0;
+        
+        function updateProgress() {
+            if (currentStep < steps.length) {
+                progressFill.style.width = steps[currentStep].progress + '%';
+                progressText.textContent = steps[currentStep].text;
+                currentStep++;
+                
+                if (currentStep < steps.length) {
+                    setTimeout(updateProgress, 400);
+                } else {
+                    setTimeout(() => {
+                        window.location.href = '/result/' + conversionId;
+                    }, 500);
+                }
+            }
+        }
+        
+        setTimeout(updateProgress, 300);
+    </script>
+</body>
+</html>

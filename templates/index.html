@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Pixel Art Converter</title>
+    <meta name="description" content="Konversi gambar kamu menjadi bergaya pixel art dengan mudah dan gratis">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="logo-icon">
+            <span class="logo-text">Quantixel</span>
+        </a>
+        <a href="/about" class="nav-link">Tentang</a>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Pixel Art Converter</h1>
+            <p>Ubah gambar kamu menjadi bergaya pixel</p>
+        </section>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <h2><span id="selectFile">Select image</span> or drag and drop</h2>
+                <p>jpeg, jpg, atau png</p>
+                <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png">
+            </div>
+            
+            <div class="file-info" id="fileInfo">
+                <strong>File dipilih:</strong> <span id="fileName"></span>
+            </div>
+
+            <!-- Convert Button -->
+            <button class="convert-btn" id="convertBtn" disabled>Convert</button>
+        </section>
+
+        <!-- Demo Section -->
+        <section class="demo-section">
+            <h2>Demo</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <div class="demo-card-image">
+                        <img src="{{ url_for('static', filename='images/portrait.png') }}" alt="Portrait">
+                    </div>
+                    <div class="demo-card-content">
+                        <h3>Portrait</h3>
+                        <p>Ubah foto portrait menjadi pixel art yang unik</p>
+                    </div>
+                </div>
+                <div class="demo-card">
+                    <div class="demo-card-image">
+                        <img src="{{ url_for('static', filename='images/landscape.png') }}" alt="Landscape">
+                    </div>
+                    <div class="demo-card-content">
+                        <h3>Landscape</h3>
+                        <p>Konversi pemandangan dengan gaya retro</p>
+                    </div>
+                </div>
+                <div class="demo-card">
+                    <div class="demo-card-image">
+                        <img src="{{ url_for('static', filename='images/gameart.png') }}" alt="Game Art">
+                    </div>
+                    <div class="demo-card-content">
+                        <h3>Game Art</h3>
+                        <p>Buat aset game dengan tampilan 8-bit</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2>Fitur Unggulan</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <h3>Cepat & Mudah</h3>
+                    <p>Konversi gambar dalam hitungan detik tanpa instalasi</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Kualitas Tinggi</h3>
+                    <p>Hasil pixel art dengan detail yang tajam</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                    </div>
+                    <h3>Aman & Private</h3>
+                    <p>Gambar tidak disimpan di server kami</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                        </svg>
+                    </div>
+                    <h3>Gratis</h3>
+                    <p>Gunakan tanpa batas dan tanpa biaya</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Pixel Art Converter</h4>
+                <p>Konversi gambar menjadi pixel art dengan mudah dan gratis. Dibuat dengan Python.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Link</h4>
+                <p><a href="/">Home</a></p>
+                <p><a href="/about">About</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Format Didukung</h4>
+                <p>JPEG, JPG, PNG</p>
+            </div>
+            <div class="footer-section">
+                <h4>Kontak</h4>
+                <p>milhamfadly@pixelart.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>2026 Pixel Art Converter. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const selectFile = document.getElementById('selectFile');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const convertBtn = document.getElementById('convertBtn');
+        
+        let selectedFile = null;
+
+        selectFile.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fileInput.click();
+        });
+
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.type.match('image/(jpeg|jpg|png)')) {
+                alert('Hanya file JPEG, JPG, atau PNG yang didukung');
+                return;
+            }
+            
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileInfo.classList.add('active');
+            convertBtn.disabled = false;
+        }
+
+        convertBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+
+            convertBtn.disabled = true;
+            convertBtn.textContent = 'Uploading...';
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/loading/' + data.conversion_id;
+                } else {
+                    alert('Error: ' + data.error);
+                    convertBtn.disabled = false;
+                    convertBtn.textContent = 'Convert';
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan saat mengupload gambar');
+                console.error(error);
+                convertBtn.disabled = false;
+                convertBtn.textContent = 'Convert';
+            }
+        });
+    </script>
+</body>
+</html>

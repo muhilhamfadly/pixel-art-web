@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Konversi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="logo-icon">
+            <span class="logo-text">Quantixel</span>
+        </a>
+        <a href="{{ url_for('index') }}" class="nav-link">Beranda</a>
+    </header>
+
+    <!-- Result Content -->
+    <main class="result-page">
+        <section class="result-hero">
+            <h1>Hasil Konversi</h1>
+            <p>Pilih ukuran pixel dan jumlah warna yang kamu suka, lalu bandingkan langsung</p>
+        </section>
+
+        <!-- Control Panel -->
+        <section class="control-panel">
+            <!-- Pixel Size Tabs -->
+            <div class="control-group">
+                <label class="control-label">Ukuran Pixel</label>
+                <div class="pixel-tabs">
+                    {% for size in pixel_sizes %}
+                    <button class="pixel-tab {% if loop.first %}active{% endif %}" data-size="{{ size }}">{{ size }}px</button>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Color (K) Tabs -->
+            <div class="control-group">
+                <label class="control-label">Jumlah Warna (K)</label>
+                <div class="color-tabs">
+                    {% for k in k_values %}
+                    <button class="color-tab {% if k == 16 %}active{% endif %}" data-k="{{ k }}">{{ k }} warna</button>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section class="comparison-section">
+            <div class="comparison-container">
+                <div class="comparison-box">
+                    <h3>Original</h3>
+                    <div class="image-wrapper">
+                        <img id="originalImage" src="{{ original }}" alt="Original Image">
+                    </div>
+                </div>
+                <div class="comparison-arrow">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+                <div class="comparison-box">
+                    <h3>Pixel Art <span id="currentSize">8px</span> - <span id="currentK">16</span> warna</h3>
+                    <div class="image-wrapper" style="position: relative;">
+                        <!-- Loading overlay -->
+                        <div id="loadingOverlay" style="
+                            display: none;
+                            position: absolute;
+                            inset: 0;
+                            background: rgba(255,255,255,0.7);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 10;
+                        ">
+                            <span style="font-size: 14px; color: #555;">Memproses...</span>
+                        </div>
+                        <img id="pixelImage" src="" alt="Pixel Art Result" style="display: block; width: 100%;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section class="download-section">
+            <a href="/download/{{ conversion_id }}/8/16" id="downloadLink" class="download-btn-large">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                Download Pixel Art
+            </a>
+            <p class="download-info">Format: PNG | Ukuran: <span id="downloadSize">8px</span> | Warna: <span id="downloadK">16</span></p>
+        </section>
+
+        <!-- Convert Another -->
+        <section class="convert-another-section">
+            <a href="/" class="convert-another-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Konversi Gambar Lain
+            </a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Pixel Art Converter</h4>
+                <p>Konversi gambar menjadi pixel art dengan mudah dan gratis. Dibuat dengan Python.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Link</h4>
+                <p><a href="/">Home</a></p>
+                <p><a href="/about">About</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Format Didukung</h4>
+                <p>JPEG, JPG, PNG</p>
+            </div>
+            <div class="footer-section">
+                <h4>Kontak</h4>
+                <p>support@pixelart.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>2026 Pixel Art Converter. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const conversionId = "{{ conversion_id }}";
+
+        let currentSize = '8';
+        let currentK = '16';
+
+        // Cache hasil fetch agar tidak request ulang kombinasi yang sama
+        const variantCache = {};
+
+        const pixelTabs = document.querySelectorAll('.pixel-tab');
+        const colorTabs = document.querySelectorAll('.color-tab');
+        const resultCards = document.querySelectorAll('.result-card');
+        const pixelImage = document.getElementById('pixelImage');
+        const currentSizeEl = document.getElementById('currentSize');
+        const currentKEl = document.getElementById('currentK');
+        const downloadLink = document.getElementById('downloadLink');
+        const downloadSize = document.getElementById('downloadSize');
+        const downloadK = document.getElementById('downloadK');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        // Fetch satu kombinasi dari server, gunakan cache kalau sudah ada
+        async function fetchVariant(size, k) {
+            const key = `${size}_${k}`;
+
+            if (variantCache[key]) {
+                return variantCache[key];
+            }
+
+            const response = await fetch(`/get_variant/${conversionId}/${size}/${k}`);
+            const data = await response.json();
+
+            if (data.image) {
+                variantCache[key] = data.image;
+                return data.image;
+            }
+
+            return null;
+        }
+
+        async function updateDisplay() {
+            // Update pixel tabs
+            pixelTabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.size === currentSize);
+            });
+
+            // Update color tabs
+            colorTabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.k === currentK);
+            });
+
+            // Update cards (kalau ada)
+            resultCards.forEach(card => {
+                const isActive = card.dataset.size === currentSize && card.dataset.k === currentK;
+                card.classList.toggle('active', isActive);
+            });
+
+            // Update label
+            currentSizeEl.textContent = currentSize + 'px';
+            currentKEl.textContent = currentK;
+
+            // Update download link
+            downloadLink.href = '/download/' + conversionId + '/' + currentSize + '/' + currentK;
+            downloadSize.textContent = currentSize + 'px';
+            downloadK.textContent = currentK;
+
+            // Tampilkan loading, fetch gambar, sembunyikan loading
+            loadingOverlay.style.display = 'flex';
+            pixelImage.style.opacity = '0.4';
+
+            const imageData = await fetchVariant(currentSize, currentK);
+
+            if (imageData) {
+                pixelImage.src = imageData;
+            }
+
+            loadingOverlay.style.display = 'none';
+            pixelImage.style.opacity = '1';
+        }
+
+        // Pixel tab click handlers
+        pixelTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                currentSize = tab.dataset.size;
+                updateDisplay();
+            });
+        });
+
+        // Color tab click handlers
+        colorTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                currentK = tab.dataset.k;
+                updateDisplay();
+            });
+        });
+
+        // Card click handlers (kalau ada)
+        resultCards.forEach(card => {
+            card.addEventListener('click', () => {
+                currentSize = card.dataset.size;
+                currentK = card.dataset.k;
+                updateDisplay();
+            });
+        });
+
+        // Load kombinasi default saat halaman pertama dibuka
+        updateDisplay();
+    </script>
+</body>
+</html>

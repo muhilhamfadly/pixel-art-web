@@ -1,0 +1,7 @@
+Flask
+gunicorn
+Pillow
+numpy
+opencv-python-headless
+scikit-image
+matplotlib

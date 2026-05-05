@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Pixel Art Converter</title>
+    <meta name="description" content="Tentang Pixel Art Converter - Tools konversi gambar ke pixel art">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="logo-icon">
+            <span class="logo-text">Quantixel</span>
+        </a>
+        <a href="{{ url_for('index') }}" class="nav-link">Beranda</a>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- About Hero -->
+        <section class="about-hero">
+            <h1>Tentang Pixel Art Converter</h1>
+            <p>Pixel Art Converter merupakan sebuah sistem berbasis web yang dikembangkan untuk mengubah citra digital menjadi bentuk pixel art menggunakan teknik pemrosesan citra digital.</p>
+        </section>
+
+        <div class="about-content">
+            <!-- What is Pixel Art -->
+            <section class="about-section">
+                <h2>🎮 Apa itu Pixel Art?</h2>
+                <p>Pixel art adalah bentuk seni digital di mana gambar direpresentasikan dalam unit piksel yang terlihat jelas. Gaya ini banyak digunakan pada game klasik era 8-bit dan 16-bit, serta saat ini kembali populer sebagai estetika visual retro.</p>
+            </section>
+
+            <!-- How it Works -->
+            <section class="about-section">
+                <h2>⚙️ Cara Kerja</h2>
+                <p>Pixel Art Converter menggunakan algoritma pixelation untuk mengubah gambar resolusi tinggi menjadi tampilan pixel art. Prosesnya:</p>
+                <ul>
+                    <li>Upload gambar dalam format JPEG, JPG, atau PNG</li>
+                    <li>Resolusi gambar dikurangi menggunakan metode nearest neighbor untuk menghasilkan efek pixelation.</li>
+                    <li>Warna citra disederhanakan menggunakan algoritma Median Cut untuk mengurangi jumlah warna.</li>
+                    <li>Sistem menghasilkan beberapa variasi pixel art yang dapat dipilih dan diunduh oleh pengguna.</li>
+                </ul>
+            </section>
+
+            <!-- Technology -->
+            <section class="about-section">
+                <h2>🛠️ Teknologi</h2>
+                <p>Website ini dibangun dengan teknologi sederhana namun powerful:</p>
+                <ul>
+                    <li>Python dengan Flask sebagai backend framework</li>
+                    <li>Pillow (PIL) untuk pemrosesan gambar</li>
+                    <li>HTML5 dan CSS3 untuk antarmuka pengguna</li>
+                    <li>Vanilla JavaScript untuk interaktivitas</li>
+                </ul>
+            </section>
+
+            <!-- Features -->
+            <section class="about-section">
+                <h2>✨ Fitur</h2>
+                <ul>
+                    <li>Konversi cepat dan real-time</li>
+                    <li>Variasi tingkat pixelation (8px – 48px)</li>
+                    <li>Preview sebelum dan sesudah konversi</li>
+                    <li>Download hasil dalam format PNG berkualitas tinggi</li>
+                    <li>Drag and drop file upload</li>
+                    <li>Responsive design untuk semua perangkat</li>
+                </ul>
+            </section>
+
+            <!-- Privacy -->
+            <section class="about-section">
+                <h2>🔒 Privasi</h2>
+                <p>Gambar yang diunggah hanya digunakan untuk proses konversi sementara dan tidak disimpan secara permanen di server.</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Pixel Art Converter</h4>
+                <p>Konversi gambar menjadi pixel art dengan mudah dan gratis. Dibuat dengan ❤️ menggunakan Python.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Link</h4>
+                <p><a href="/">Home</a></p>
+                <p><a href="/about">About</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Format Didukung</h4>
+                <p>JPEG, JPG, PNG</p>
+            </div>
+            <div class="footer-section">
+                <h4>Kontak</h4>
+                <p>support@pixelart.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Pixel Art Converter. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
