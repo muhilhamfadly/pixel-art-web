@@ -9,7 +9,7 @@ import gc
 
 app = Flask(__name__)
 app.secret_key = 'pixel-art-converter-secret-key-2024'
-app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024  
+app.config['MAX_CONTENT_LENGTH'] = 60 * 1024 * 1024  
 
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -27,7 +27,6 @@ PROCESS_DIMENSION = 512
 PREVIEW_DIMENSION = 1024   
 
 def resize_to_dimension(image, max_dim):
-    """Resize image agar sisi terpanjang = max_dim, pertahankan aspect ratio"""
     w, h = image.size
     if max(w, h) > max_dim:
         ratio = max_dim / max(w, h)
@@ -94,9 +93,6 @@ def median_cut_optimized(pixels, k):
 
 
 def quantize_image_optimized(image, k):
-    """
-    Quantize image kecil (PROCESS_DIMENSION) → hasilkan palette warna.
-    """
     img_np = np.array(image, dtype=np.uint8)
     h, w, _ = img_np.shape
 
@@ -117,8 +113,6 @@ def quantize_image_optimized(image, k):
 
     new_pixels = palette[nearest].reshape(h, w, 3)
     result = Image.fromarray(new_pixels.astype(np.uint8))
-
-    # Kembalikan juga palette agar bisa dipakai ulang di resolusi lain
     palette_uint8 = palette.astype(np.uint8)
 
     del pixels, nearest, new_pixels, img_np
@@ -128,10 +122,6 @@ def quantize_image_optimized(image, k):
 
 
 def apply_palette_to_image(image_target, palette):
-    """
-    Terapkan palette warna (dari quantize versi kecil) ke image_target resolusi tinggi.
-    Ini memungkinkan output resolusi asli tanpa harus quantize ulang dari awal.
-    """
     target_np = np.array(image_target, dtype=np.uint8)
     h, w, _ = target_np.shape
     pixels = target_np.reshape(-1, 3).astype(np.float32)
@@ -159,12 +149,10 @@ def apply_palette_to_image(image_target, palette):
 
 
 def upsample_pixel_art(image, target_size):
-    """Upsample pixel art using nearest neighbor to preserve sharp edges"""
     return image.resize(target_size, Image.NEAREST)
 
 
 def image_to_base64(image):
-    """Convert PIL Image to base64 string"""
     img_bytes = io.BytesIO()
     image.save(img_bytes, format='PNG', optimize=True)
     img_bytes.seek(0)
@@ -190,10 +178,7 @@ def process_variant(data, pixel_size, k, for_download=False):
 
     return pixel_art
 
-
-# ============================================
 # Flask Routes
-# ============================================
 
 @app.route('/')
 def index():
@@ -267,10 +252,6 @@ def upload():
 
 @app.route('/get_variant/<conversion_id>/<int:pixel_size>/<int:k>')
 def get_variant(conversion_id, pixel_size, k):
-    """
-    Lazy load: proses dan kembalikan preview (PREVIEW_DIMENSION) untuk 1 kombinasi.
-    Gunakan cache agar kombinasi yang sama tidak diproses ulang.
-    """
     if conversion_id not in processed_images:
         return jsonify({'error': 'Not found'}), 404
 
@@ -323,10 +304,6 @@ def check_conversion(conversion_id):
 
 @app.route('/download/<conversion_id>/<pixel_size>/<k_value>')
 def download(conversion_id, pixel_size, k_value):
-    """
-    Download: proses dengan resolusi ASLI (tidak dari cache preview).
-    Hasilnya langsung di-stream ke user tanpa disimpan di memori.
-    """
     if conversion_id not in processed_images:
         return jsonify({'error': 'Not found'}), 404
 
