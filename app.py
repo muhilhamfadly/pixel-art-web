@@ -11,7 +11,10 @@ app = Flask(__name__)
 app.secret_key = 'pixel-art-converter-secret-key-2024'
 app.config['MAX_CONTENT_LENGTH'] = 60 * 1024 * 1024  
 
-UPLOAD_FOLDER = 'uploads'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
