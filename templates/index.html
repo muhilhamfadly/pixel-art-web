@@ -151,6 +151,31 @@
         </div>
     </footer>
 
+        <!-- CUSTOM ALERT -->
+    <div class="custom-alert" id="customAlert">
+
+        <div class="custom-alert-box">
+
+            <div class="custom-alert-icon">
+                ⚠
+            </div>
+
+            <h3 id="alertTitle">
+                Peringatan
+            </h3>
+
+            <p id="alertMessage">
+                Pesan notifikasi
+            </p>
+
+            <button id="alertButton">
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
     <script>
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
@@ -158,8 +183,25 @@
         const fileInfo = document.getElementById('fileInfo');
         const fileName = document.getElementById('fileName');
         const convertBtn = document.getElementById('convertBtn');
-        
+
+        const customAlert = document.getElementById('customAlert');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertButton = document.getElementById('alertButton');
+
         let selectedFile = null;
+
+        // =========================
+        // CUSTOM ALERT
+        // =========================
+
+        function showAlert(message) {
+            alertMessage.textContent = message;
+            customAlert.classList.add('show');
+        }
+
+        alertButton.addEventListener('click', () => {
+            customAlert.classList.remove('show');
+        });
 
         selectFile.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -195,8 +237,26 @@
         });
 
         function handleFile(file) {
+
+            // Format validation
             if (!file.type.match('image/(jpeg|jpg|png)')) {
-                alert('Hanya file JPEG, JPG, atau PNG yang didukung');
+
+                showAlert(
+                    'Hanya file JPEG, JPG, atau PNG yang didukung'
+                );
+
+                return;
+            }
+
+            // Size validation
+            const maxSize = 60 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+
+                showAlert(
+                    'Ukuran gambar maksimal 60 MB'
+                );
+
                 return;
             }
             
@@ -207,15 +267,29 @@
         }
 
         convertBtn.addEventListener('click', async () => {
+
             if (!selectedFile) return;
+            const maxSize = 60 * 1024 * 1024;
+
+            if (selectedFile.size > maxSize) {
+
+                showAlert(
+                    'Ukuran gambar maksimal 60 MB'
+                );
+
+                return;
+            }
 
             convertBtn.disabled = true;
+
             convertBtn.textContent = 'Uploading...';
 
             const formData = new FormData();
+
             formData.append('file', selectedFile);
 
             try {
+
                 const response = await fetch('/upload', {
                     method: 'POST',
                     body: formData
@@ -224,16 +298,31 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    window.location.href = '/loading/' + data.conversion_id;
+
+                    window.location.href =
+                        '/loading/' + data.conversion_id;
+
                 } else {
-                    alert('Error: ' + data.error);
+
+                    showAlert(
+                        data.error || 'Terjadi kesalahan saat upload'
+                    );
+
                     convertBtn.disabled = false;
+
                     convertBtn.textContent = 'Convert';
                 }
+
             } catch (error) {
-                alert('Terjadi kesalahan saat mengupload gambar');
+
                 console.error(error);
+
+                showAlert(
+                    'Terjadi kesalahan saat mengupload gambar'
+                );
+
                 convertBtn.disabled = false;
+
                 convertBtn.textContent = 'Convert';
             }
         });
