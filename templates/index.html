@@ -49,7 +49,7 @@
         <section class="demo-section">
             <h2>Demo</h2>
             <div class="demo-grid">
-                <div class="demo-card">
+                <button class="demo-card" type="button" data-demo-title="Portrait" data-demo-desc="Ubah foto portrait menjadi pixel art yang unik" data-demo-img="{{ url_for('static', filename='images/portrait.png') }}">
                     <div class="demo-card-image">
                         <img src="{{ url_for('static', filename='images/portrait.png') }}" alt="Portrait">
                     </div>
@@ -57,8 +57,8 @@
                         <h3>Portrait</h3>
                         <p>Ubah foto portrait menjadi pixel art yang unik</p>
                     </div>
-                </div>
-                <div class="demo-card">
+                </button>
+                <button class="demo-card" type="button" data-demo-title="Landscape" data-demo-desc="Konversi pemandangan dengan gaya retro" data-demo-img="{{ url_for('static', filename='images/landscape.png') }}">
                     <div class="demo-card-image">
                         <img src="{{ url_for('static', filename='images/landscape.png') }}" alt="Landscape">
                     </div>
@@ -66,8 +66,8 @@
                         <h3>Landscape</h3>
                         <p>Konversi pemandangan dengan gaya retro</p>
                     </div>
-                </div>
-                <div class="demo-card">
+                </button>
+                <button class="demo-card" type="button" data-demo-title="Game Art" data-demo-desc="Buat aset game dengan tampilan 8-bit" data-demo-img="{{ url_for('static', filename='images/gameart.png') }}">
                     <div class="demo-card-image">
                         <img src="{{ url_for('static', filename='images/gameart.png') }}" alt="Game Art">
                     </div>
@@ -75,7 +75,7 @@
                         <h3>Game Art</h3>
                         <p>Buat aset game dengan tampilan 8-bit</p>
                     </div>
-                </div>
+                </button>
             </div>
         </section>
 
@@ -134,8 +134,8 @@
             </div>
             <div class="footer-section">
                 <h4>Link</h4>
-                <p><a href="/">Home</a></p>
-                <p><a href="/about">About</a></p>
+                <p><a href="/">Beranda</a></p>
+                <p><a href="/about">Tentang</a></p>
             </div>
             <div class="footer-section">
                 <h4>Format Didukung</h4>
@@ -150,6 +150,18 @@
             <p>2026 Pixel Art Converter. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- DEMO PREVIEW MODAL -->
+    <div class="demo-modal" id="demoModal" aria-hidden="true">
+        <div class="demo-modal-card" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle">
+            <button class="demo-modal-close" type="button" id="demoModalClose" aria-label="Tutup preview">×</button>
+            <img id="demoModalImage" src="" alt="">
+            <div class="demo-modal-content">
+                <h3 id="demoModalTitle"></h3>
+                <p id="demoModalDesc"></p>
+            </div>
+        </div>
+    </div>
 
         <!-- CUSTOM ALERT -->
     <div class="custom-alert" id="customAlert">
@@ -187,6 +199,12 @@
         const customAlert = document.getElementById('customAlert');
         const alertMessage = document.getElementById('alertMessage');
         const alertButton = document.getElementById('alertButton');
+        const demoCards = document.querySelectorAll('.demo-card');
+        const demoModal = document.getElementById('demoModal');
+        const demoModalClose = document.getElementById('demoModalClose');
+        const demoModalImage = document.getElementById('demoModalImage');
+        const demoModalTitle = document.getElementById('demoModalTitle');
+        const demoModalDesc = document.getElementById('demoModalDesc');
 
         let selectedFile = null;
 
@@ -201,6 +219,43 @@
 
         alertButton.addEventListener('click', () => {
             customAlert.classList.remove('show');
+        });
+
+        function openDemoModal(card) {
+            demoModalImage.src = card.dataset.demoImg;
+            demoModalImage.alt = card.dataset.demoTitle;
+            demoModalTitle.textContent = card.dataset.demoTitle;
+            demoModalDesc.textContent = card.dataset.demoDesc;
+            demoModal.classList.add('show');
+            demoModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeDemoModal() {
+            demoModal.classList.remove('show');
+            demoModal.setAttribute('aria-hidden', 'true');
+            demoModalImage.src = '';
+            document.body.classList.remove('modal-open');
+        }
+
+        demoCards.forEach(card => {
+            card.addEventListener('click', () => {
+                openDemoModal(card);
+            });
+        });
+
+        demoModalClose.addEventListener('click', closeDemoModal);
+
+        demoModal.addEventListener('click', (e) => {
+            if (e.target === demoModal) {
+                closeDemoModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && demoModal.classList.contains('show')) {
+                closeDemoModal();
+            }
         });
 
         selectFile.addEventListener('click', (e) => {

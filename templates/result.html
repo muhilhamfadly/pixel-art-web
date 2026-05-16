@@ -66,21 +66,12 @@
                 </div>
                 <div class="comparison-box">
                     <h3>Pixel Art <span id="currentSize">8px</span> - <span id="currentK">16</span> warna</h3>
-                    <div class="image-wrapper" style="position: relative;">
+                    <div class="image-wrapper image-wrapper-loading">
                         <!-- Loading overlay -->
-                        <div id="loadingOverlay" style="
-                            display: none;
-                            position: absolute;
-                            inset: 0;
-                            background: rgba(255,255,255,0.7);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            z-index: 10;
-                        ">
-                            <span style="font-size: 14px; color: #555;">Memproses...</span>
+                        <div id="loadingOverlay" class="loading-overlay">
+                            <span>Memproses...</span>
                         </div>
-                        <img id="pixelImage" src="" alt="Pixel Art Result" style="display: block; width: 100%;">
+                        <img id="pixelImage" src="" alt="Pixel Art Result">
                     </div>
                 </div>
             </div>
@@ -117,8 +108,8 @@
             </div>
             <div class="footer-section">
                 <h4>Link</h4>
-                <p><a href="/">Home</a></p>
-                <p><a href="/about">About</a></p>
+                <p><a href="/">Beranda</a></p>
+                <p><a href="/about">Tentang</a></p>
             </div>
             <div class="footer-section">
                 <h4>Format Didukung</h4>
