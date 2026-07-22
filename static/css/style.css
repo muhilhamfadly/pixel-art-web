@@ -1,5 +1,4 @@
 :root {
-
     /* Main Palette */
     --primary: #8F7A5F;
     --primary-dark: #6F5C46;
@@ -985,7 +984,6 @@ main {
     font-weight: bold;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 2rem;

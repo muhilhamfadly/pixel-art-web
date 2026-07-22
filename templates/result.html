@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <a href="/" class="logo">
             <img src="{{ url_for('static', filename='logo.png') }}" class="logo-icon">
@@ -19,17 +18,12 @@
         </a>
         <a href="{{ url_for('index') }}" class="nav-link">Beranda</a>
     </header>
-
-    <!-- Result Content -->
     <main class="result-page">
         <section class="result-hero">
             <h1>Hasil Konversi</h1>
             <p>Pilih ukuran pixel dan jumlah warna yang kamu suka, lalu bandingkan langsung</p>
         </section>
-
-        <!-- Control Panel -->
         <section class="control-panel">
-            <!-- Pixel Size Tabs -->
             <div class="control-group">
                 <label class="control-label">Ukuran Pixel</label>
                 <div class="pixel-tabs">
@@ -38,8 +32,6 @@
                     {% endfor %}
                 </div>
             </div>
-            
-            <!-- Color (K) Tabs -->
             <div class="control-group">
                 <label class="control-label">Jumlah Warna (K)</label>
                 <div class="color-tabs">
@@ -49,8 +41,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Comparison Section -->
         <section class="comparison-section">
             <div class="comparison-container">
                 <div class="comparison-box">
@@ -67,7 +57,6 @@
                 <div class="comparison-box">
                     <h3>Pixel Art <span id="currentSize">8px</span> - <span id="currentK">16</span> warna</h3>
                     <div class="image-wrapper image-wrapper-loading">
-                        <!-- Loading overlay -->
                         <div id="loadingOverlay" class="loading-overlay">
                             <span>Memproses...</span>
                         </div>
@@ -76,8 +65,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Download Section -->
         <section class="download-section">
             <a href="/download/{{ conversion_id }}/8/16" id="downloadLink" class="download-btn-large">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -87,8 +74,6 @@
             </a>
             <p class="download-info">Format: PNG | Ukuran: <span id="downloadSize">8px</span> | Warna: <span id="downloadK">16</span></p>
         </section>
-
-        <!-- Convert Another -->
         <section class="convert-another-section">
             <a href="/" class="convert-another-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -98,8 +83,6 @@
             </a>
         </section>
     </main>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -116,8 +99,8 @@
                 <p>JPEG, JPG, PNG</p>
             </div>
             <div class="footer-section">
-                <h4>Kontak</h4>
-                <p>support@pixelart.com</p>
+                <h4>Developer</h4>
+                <p>Muhammad Ilham Fadly</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -127,11 +110,8 @@
 
     <script>
         const conversionId = "{{ conversion_id }}";
-
         let currentSize = '8';
         let currentK = '16';
-
-        // Cache hasil fetch agar tidak request ulang kombinasi yang sama
         const variantCache = {};
 
         const pixelTabs = document.querySelectorAll('.pixel-tab');
@@ -144,15 +124,12 @@
         const downloadSize = document.getElementById('downloadSize');
         const downloadK = document.getElementById('downloadK');
         const loadingOverlay = document.getElementById('loadingOverlay');
-
-        // Fetch satu kombinasi dari server, gunakan cache kalau sudah ada
         async function fetchVariant(size, k) {
             const key = `${size}_${k}`;
 
             if (variantCache[key]) {
                 return variantCache[key];
             }
-
             const response = await fetch(`/get_variant/${conversionId}/${size}/${k}`);
             const data = await response.json();
 
@@ -160,37 +137,25 @@
                 variantCache[key] = data.image;
                 return data.image;
             }
-
             return null;
         }
 
         async function updateDisplay() {
-            // Update pixel tabs
             pixelTabs.forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.size === currentSize);
             });
-
-            // Update color tabs
             colorTabs.forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.k === currentK);
             });
-
-            // Update cards (kalau ada)
             resultCards.forEach(card => {
                 const isActive = card.dataset.size === currentSize && card.dataset.k === currentK;
                 card.classList.toggle('active', isActive);
             });
-
-            // Update label
             currentSizeEl.textContent = currentSize + 'px';
             currentKEl.textContent = currentK;
-
-            // Update download link
             downloadLink.href = '/download/' + conversionId + '/' + currentSize + '/' + currentK;
             downloadSize.textContent = currentSize + 'px';
             downloadK.textContent = currentK;
-
-            // Tampilkan loading, fetch gambar, sembunyikan loading
             loadingOverlay.style.display = 'flex';
             pixelImage.style.opacity = '0.4';
 
@@ -203,24 +168,18 @@
             loadingOverlay.style.display = 'none';
             pixelImage.style.opacity = '1';
         }
-
-        // Pixel tab click handlers
         pixelTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 currentSize = tab.dataset.size;
                 updateDisplay();
             });
         });
-
-        // Color tab click handlers
         colorTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 currentK = tab.dataset.k;
                 updateDisplay();
             });
         });
-
-        // Card click handlers (kalau ada)
         resultCards.forEach(card => {
             card.addEventListener('click', () => {
                 currentSize = card.dataset.size;
@@ -229,7 +188,6 @@
             });
         });
 
-        // Load kombinasi default saat halaman pertama dibuka
         updateDisplay();
     </script>
 </body>

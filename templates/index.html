@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <a href="/" class="logo">
             <img src="{{ url_for('static', filename='logo.png') }}" class="logo-icon">
@@ -21,15 +20,11 @@
         <a href="/about" class="nav-link">Tentang</a>
     </header>
 
-    <!-- Main Content -->
     <main>
-        <!-- Hero Section -->
         <section class="hero">
             <h1>Pixel Art Converter</h1>
             <p>Ubah gambar kamu menjadi bergaya pixel</p>
         </section>
-
-        <!-- Upload Section -->
         <section class="upload-section">
             <div class="upload-area" id="uploadArea">
                 <h2><span id="selectFile">Select image</span> or drag and drop</h2>
@@ -40,16 +35,15 @@
             <div class="file-info" id="fileInfo">
                 <strong>File dipilih:</strong> <span id="fileName"></span>
             </div>
-
-            <!-- Convert Button -->
             <button class="convert-btn" id="convertBtn" disabled>Convert</button>
         </section>
 
-        <!-- Demo Section -->
         <section class="demo-section">
             <h2>Demo</h2>
             <div class="demo-grid">
-                <button class="demo-card" type="button" data-demo-title="Portrait" data-demo-desc="Ubah foto portrait menjadi pixel art yang unik" data-demo-img="{{ url_for('static', filename='images/portrait.png') }}">
+                <button class="demo-card" type="button" data-demo-title="Portrait" 
+                data-demo-desc="Ubah foto portrait menjadi pixel art yang unik" 
+                data-demo-img="{{ url_for('static', filename='images/portrait.png') }}">
                     <div class="demo-card-image">
                         <img src="{{ url_for('static', filename='images/portrait.png') }}" alt="Portrait">
                     </div>
@@ -58,7 +52,9 @@
                         <p>Ubah foto portrait menjadi pixel art yang unik</p>
                     </div>
                 </button>
-                <button class="demo-card" type="button" data-demo-title="Landscape" data-demo-desc="Konversi pemandangan dengan gaya retro" data-demo-img="{{ url_for('static', filename='images/landscape.png') }}">
+                <button class="demo-card" type="button" data-demo-title="Landscape" 
+                data-demo-desc="Konversi pemandangan dengan gaya retro" 
+                data-demo-img="{{ url_for('static', filename='images/landscape.png') }}">
                     <div class="demo-card-image">
                         <img src="{{ url_for('static', filename='images/landscape.png') }}" alt="Landscape">
                     </div>
@@ -67,7 +63,8 @@
                         <p>Konversi pemandangan dengan gaya retro</p>
                     </div>
                 </button>
-                <button class="demo-card" type="button" data-demo-title="Game Art" data-demo-desc="Buat aset game dengan tampilan 8-bit" data-demo-img="{{ url_for('static', filename='images/gameart.png') }}">
+                <button class="demo-card" type="button" data-demo-title="Game Art" 
+                data-demo-desc="Buat aset game dengan tampilan 8-bit" data-demo-img="{{ url_for('static', filename='images/gameart.png') }}">
                     <div class="demo-card-image">
                         <img src="{{ url_for('static', filename='images/gameart.png') }}" alt="Game Art">
                     </div>
@@ -79,7 +76,6 @@
             </div>
         </section>
 
-        <!-- Features Section -->
         <section class="features-section">
             <h2>Fitur Unggulan</h2>
             <div class="features-grid">
@@ -125,7 +121,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -139,11 +134,11 @@
             </div>
             <div class="footer-section">
                 <h4>Format Didukung</h4>
-                <p>JPEG, JPG, PNG</p>
+                <p>JPEG, JPG, PNG</p> 
             </div>
             <div class="footer-section">
-                <h4>Kontak</h4>
-                <p>milhamfadly@pixelart.com</p>
+                <h4>Developer</h4>
+                <p>Muhammad Ilham Fadly</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -151,7 +146,6 @@
         </div>
     </footer>
 
-    <!-- DEMO PREVIEW MODAL -->
     <div class="demo-modal" id="demoModal" aria-hidden="true">
         <div class="demo-modal-card" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle">
             <button class="demo-modal-close" type="button" id="demoModalClose" aria-label="Tutup preview">×</button>
@@ -163,23 +157,17 @@
         </div>
     </div>
 
-        <!-- CUSTOM ALERT -->
     <div class="custom-alert" id="customAlert">
-
         <div class="custom-alert-box">
-
             <div class="custom-alert-icon">
                 ⚠
             </div>
-
             <h3 id="alertTitle">
                 Peringatan
             </h3>
-
             <p id="alertMessage">
                 Pesan notifikasi
             </p>
-
             <button id="alertButton">
                 OK
             </button>
@@ -195,7 +183,6 @@
         const fileInfo = document.getElementById('fileInfo');
         const fileName = document.getElementById('fileName');
         const convertBtn = document.getElementById('convertBtn');
-
         const customAlert = document.getElementById('customAlert');
         const alertMessage = document.getElementById('alertMessage');
         const alertButton = document.getElementById('alertButton');
@@ -205,18 +192,12 @@
         const demoModalImage = document.getElementById('demoModalImage');
         const demoModalTitle = document.getElementById('demoModalTitle');
         const demoModalDesc = document.getElementById('demoModalDesc');
-
         let selectedFile = null;
-
-        // =========================
-        // CUSTOM ALERT
-        // =========================
 
         function showAlert(message) {
             alertMessage.textContent = message;
             customAlert.classList.add('show');
         }
-
         alertButton.addEventListener('click', () => {
             customAlert.classList.remove('show');
         });
@@ -243,9 +224,7 @@
                 openDemoModal(card);
             });
         });
-
         demoModalClose.addEventListener('click', closeDemoModal);
-
         demoModal.addEventListener('click', (e) => {
             if (e.target === demoModal) {
                 closeDemoModal();
@@ -257,25 +236,20 @@
                 closeDemoModal();
             }
         });
-
         selectFile.addEventListener('click', (e) => {
             e.stopPropagation();
             fileInput.click();
         });
-
         uploadArea.addEventListener('click', () => {
             fileInput.click();
         });
-
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('dragover');
         });
-
         uploadArea.addEventListener('dragleave', () => {
             uploadArea.classList.remove('dragover');
         });
-
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.classList.remove('dragover');
@@ -284,7 +258,6 @@
                 handleFile(files[0]);
             }
         });
-
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
                 handleFile(e.target.files[0]);
@@ -292,26 +265,18 @@
         });
 
         function handleFile(file) {
-
-            // Format validation
             if (!file.type.match('image/(jpeg|jpg|png)')) {
-
                 showAlert(
                     'Hanya file JPEG, JPG, atau PNG yang didukung'
                 );
 
                 return;
             }
-
-            // Size validation
             const maxSize = 60 * 1024 * 1024;
-
             if (file.size > maxSize) {
-
                 showAlert(
                     'Ukuran gambar maksimal 60 MB'
                 );
-
                 return;
             }
             
@@ -320,64 +285,43 @@
             fileInfo.classList.add('active');
             convertBtn.disabled = false;
         }
-
         convertBtn.addEventListener('click', async () => {
 
             if (!selectedFile) return;
             const maxSize = 60 * 1024 * 1024;
-
             if (selectedFile.size > maxSize) {
-
                 showAlert(
                     'Ukuran gambar maksimal 60 MB'
                 );
-
                 return;
             }
-
             convertBtn.disabled = true;
-
             convertBtn.textContent = 'Uploading...';
-
             const formData = new FormData();
-
             formData.append('file', selectedFile);
 
             try {
-
                 const response = await fetch('/upload', {
                     method: 'POST',
                     body: formData
                 });
-
                 const data = await response.json();
-
                 if (data.success) {
-
                     window.location.href =
                         '/loading/' + data.conversion_id;
-
                 } else {
-
                     showAlert(
                         data.error || 'Terjadi kesalahan saat upload'
                     );
-
                     convertBtn.disabled = false;
-
                     convertBtn.textContent = 'Convert';
                 }
-
             } catch (error) {
-
                 console.error(error);
-
                 showAlert(
                     'Terjadi kesalahan saat mengupload gambar'
                 );
-
                 convertBtn.disabled = false;
-
                 convertBtn.textContent = 'Convert';
             }
         });

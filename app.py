@@ -265,7 +265,6 @@ def get_variant(conversion_id, pixel_size, k):
         pixel_art = process_variant(data, pixel_size, k, for_download=False)
         result = image_to_base64(pixel_art)
 
-        # Batasi cache preview (maks 9 kombinasi)
         if len(data['cache_preview']) >= 9:
             oldest = next(iter(data['cache_preview']))
             del data['cache_preview'][oldest]
@@ -318,7 +317,6 @@ def download(conversion_id, pixel_size, k_value):
 
     data = processed_images[conversion_id]
 
-    # Proses dengan resolusi asli
     pixel_art = process_variant(data, ps, k, for_download=True)
 
     img_bytes = io.BytesIO()
@@ -338,7 +336,6 @@ def download(conversion_id, pixel_size, k_value):
         as_attachment=True,
         download_name=filename
     )
-
 
 if __name__ == '__main__':
     import os
